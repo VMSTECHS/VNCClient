@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         selected.setNickname(edtNickName.getText().toString());
         Log.d("VNC","Nick Name : "+edtNickName.getText().toString());
       // selected.setUserName(edtPassword.getText().toString());
-       selected.setUserName(Constt.PASSWORD);
+       selected.setUserName(Constt.USERNAME);
       //  selected.setForceFull(groupForceFullScreen.getCheckedRadioButtonId()==R.id.radioForceFullScreenAuto ? BitmapImplHint.AUTO : (groupForceFullScreen.getCheckedRadioButtonId()==R.id.radioForceFullScreenOn ? BitmapImplHint.FULL : BitmapImplHint.TILE));
         selected.setPassword(Constt.PASSWORD);
         Log.d("VNC","Password : "+edtPassword.getText().toString());

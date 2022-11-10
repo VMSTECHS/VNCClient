@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +46,8 @@ public class VncCanvasActivity extends Activity {
     Handler handler;
     float dragX = 0, dragY = 0;
     private MouseMover mouseMover;
+    private static boolean mLeftDown = false, mRightDown = false, mMiddleDown = false;
+
     /**
      * @author Michael A. MacDonald
      */
@@ -174,52 +177,47 @@ public class VncCanvasActivity extends Activity {
 
             //---------------------------
             if (dragMode) {
-                Log.e("Hello move on Drag","Drag event");
+                Log.e("Hello move on Drag", "Drag event");
                 vncCanvas.changeTouchCoordinatesToFullFrame(e);
                 if (e.getAction() == MotionEvent.ACTION_MOVE)
                     dragMode = false;
                 return vncCanvas.processPointerEvent(e, true);
 
             } else
-                Log.e("Hello move on Touch","Touch event");
-            //------------------OnTouch Event TouchPad (Rakesh)----------------
-//            switch (e.getActionMasked()) {
-//                case MotionEvent.ACTION_DOWN:
-//                    xCoOrdinate = e.getX() - e.getRawX();
-//                    yCoOrdinate = e.getY() - e.getRawY();
-//                    break;
-//                case MotionEvent.ACTION_MOVE:
-//                  //  float dragX = 0, dragY = 0;
-//                   // super(VncCanvasActivity.this);
-//                  //  DPadMouseKeyHandler   keyHandler = new DPadMouseKeyHandler(VncCanvasActivity.this, vncCanvas.handler);
-//                   // mouseMover = new MouseMover(VncCanvasActivity.this, handler);
-//                    //if(view.getX()>0 && view.getY()>0) {
-//                   // VncCanvasActivity.this.animate().x(e.getRawX() + xCoOrdinate).y(e.getRawY() + yCoOrdinate).setDuration(0).start();
-//
-//                    float deltaX = (e.getX() - dragX) * vncCanvas.getScale();
-//                    float deltaY = (e.getY() - dragY) * vncCanvas.getScale();
-//                    dragX = e.getX();
-//                    dragY = e.getY();
-//                    deltaX = fineCtrlScale(deltaX);
-//                    deltaY = fineCtrlScale(deltaY);
-//
-//                    // compute the absolution new mouse pos on the remote site.
-//                    float newRemoteX = vncCanvas.mouseX + deltaX;
-//                    float newRemoteY = vncCanvas.mouseY + deltaY;
-//
-//                    if (e.getAction() == MotionEvent.ACTION_UP)
-//                        dragMode = false;
-//                    e.setLocation(newRemoteX, newRemoteY);
-//
-//                    Log.d("XYVALUE", "x pre = " + e.getX() + " y pre = " + e.getY() + "\nx new =" + e.getRawX() + " y new = " + e.getRawY() + "\n x coordinate = " + xCoOrdinate + "y coordinate = " + yCoOrdinate);
-//                            /*}
-//                        },1000);*/
-//                    return vncCanvas.processPointerEvent(e, true);
-//                   // break;
-//                default:
-//                    return false;
-//            }
-                return super.onTouchEvent(e);
+                Log.e("Hello move on Touch", "Touch event");
+
+            //----Mouse Left Click and Right click Events (Rakesh)----
+            if (e.getSource() == InputDevice.SOURCE_MOUSE) {
+
+                boolean leftDown = e.isButtonPressed(MotionEvent.BUTTON_PRIMARY);
+                boolean rightDown = e.isButtonPressed(MotionEvent.BUTTON_SECONDARY);
+                boolean middleDown = e.isButtonPressed(MotionEvent.BUTTON_TERTIARY);
+
+                if (leftDown != mLeftDown) {
+                    // left button pressed or released
+                    mLeftDown = leftDown;
+                    vncCanvas.processPointerEvent(e, true);
+                    // Toast.makeText(VncCanvasActivity.this, "Left btn-11--"+mLeftDown, Toast.LENGTH_SHORT).show();
+                }
+
+                if (rightDown != mRightDown) {
+                    // right button pressed or released
+                    mRightDown = rightDown;
+                    vncCanvas.processPointerEvent(e, true, true);
+                    // Toast.makeText(VncCanvasActivity.this, "right btn-22--"+mRightDown, Toast.LENGTH_SHORT).show();
+                }
+
+                if (middleDown != mMiddleDown) {
+                    // middle button pressed or released
+                    mMiddleDown = middleDown;
+                }
+
+                return true;
+            }
+
+            // return false;
+            //--------------end mouse click events method-----------
+            return super.onTouchEvent(e);
 
         }
 
@@ -231,10 +229,10 @@ public class VncCanvasActivity extends Activity {
 
         @Override
         public void onLongPress(MotionEvent e) {
-         //   showZoomer(true);
+            //   showZoomer(true);
             BCFactory.getInstance().getBCHaptic().performLongPressHaptic(
                     vncCanvas);
-           // dragMode = true;
+            // dragMode = true;
             vncCanvas.processPointerEvent(vncCanvas
                     .changeTouchCoordinatesToFullFrame(e), true);
         }
@@ -296,7 +294,7 @@ public class VncCanvasActivity extends Activity {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             vncCanvas.changeTouchCoordinatesToFullFrame(e);
-           // vncCanvas.panToMouse();
+            // vncCanvas.panToMouse();
             vncCanvas.processPointerEvent(e, true);
             e.setAction(MotionEvent.ACTION_UP);
 
@@ -442,7 +440,7 @@ public class VncCanvasActivity extends Activity {
         public void onLongPress(MotionEvent e) {
 
 
-          //  showZoomer(true);
+            //  showZoomer(true);
             BCFactory.getInstance().getBCHaptic().performLongPressHaptic(
                     vncCanvas);
             dragMode = true;
@@ -467,7 +465,7 @@ public class VncCanvasActivity extends Activity {
             if (BCFactory.getInstance().getBCMotionEvent().getPointerCount(e2) > 1) {
                 if (inScaling)
                     return false;
-              //  showZoomer(false);
+                //  showZoomer(false);
                 return vncCanvas.pan((int) distanceX, (int) distanceY);
             } else {
                 // compute the relative movement offset on the remote screen.
@@ -694,7 +692,7 @@ public class VncCanvasActivity extends Activity {
              */
             @Override
             public void onClick(View v) {
-              //  showZoomer(true);
+                //  showZoomer(true);
                 vncCanvas.scaling.zoomIn(VncCanvasActivity.this);
 
             }
@@ -709,7 +707,7 @@ public class VncCanvasActivity extends Activity {
              */
             @Override
             public void onClick(View v) {
-              //  showZoomer(true);
+                //  showZoomer(true);
                 vncCanvas.scaling.zoomOut(VncCanvasActivity.this);
 
             }
@@ -1089,6 +1087,15 @@ public class VncCanvasActivity extends Activity {
     }
 
     @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        // Toast.makeText(VncCanvasActivity.this,"X: "+event.getX()+" Y: "+event.getY(),Toast.LENGTH_LONG).show();
+        // vncCanvas.warpMouse(event.getX(),event.getY());
+        vncCanvas.moveMouse(event);
+        // vncCanvas.scrollToAbsolute();
+        return super.onGenericMotionEvent(event);
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         return inputHandler.onTouchEvent(event);
     }
@@ -1103,7 +1110,7 @@ public class VncCanvasActivity extends Activity {
         for (int i = 0; i < choices.length; i++) {
             COLORMODEL cm = COLORMODEL.values()[i];
             choices[i] = cm.toString();
-            Log.e("hello color model",""+cm);
+            Log.e("hello color model", "" + cm);
             if (vncCanvas.isColorModel(cm))
                 currentSelection = i;
         }
@@ -1558,7 +1565,7 @@ public class VncCanvasActivity extends Activity {
             // Mouse Pointer Control Mode
             // Pointer event is absolute coordinates.
 
-            Log.e("Hello mousepad---Touch","MousePad Touch");
+            Log.e("Hello mousepad---Touch", "MousePad Touch");
             vncCanvas.changeTouchCoordinatesToFullFrame(event);
             if (vncCanvas.processPointerEvent(event, true))
                 return true;

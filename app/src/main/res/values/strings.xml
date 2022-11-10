@@ -5,10 +5,11 @@
     <string name="ip_address">IP Address</string>
     <string name="port">Port</string>
 <!--    <string name="ipAddress">223.233.70.31</string>-->
-    <string name="ipAddress">103.125.201.181</string>
+    <string name="ipAddress">10.250.51.108</string>
     <string name="portaddress">5900</string>
-    <string name="usernames">Antplay</string>
-    <string name="passwords">Antplay</string>
+    <string name="usernames">Antplay-Pc</string>
+<!--    <string name="passwords">test</string>-->
+    <string name="passwords">vms@rakesh</string>
 
 
     <string name="address_caption">Address</string>

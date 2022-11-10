@@ -65,7 +65,8 @@ public class VncCanvas extends ImageView {
 	
 	// Available to activity
 	int mouseX, mouseY;
-	
+	float mousesX, mousesY;
+
 	// Connection parameters
 	ConnectionBean connection;
 
@@ -160,7 +161,7 @@ public class VncCanvas extends ImageView {
 		}
 		this.pendingColorModel = COLORMODEL.valueOf(bean.getColorModel());
 
-		// Startup the RFB thread with a nifty progess dialog
+		// Startup the RFB thread with a nifty progress dialog
 		final ProgressDialog pd = ProgressDialog.show(getContext(), "Connecting...", "Establishing handshake.\nPlease wait...", true, true, new DialogInterface.OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -206,6 +207,7 @@ public class VncCanvas extends ImageView {
 								error = "VNC authentication failed!";
  							}
 							final String error_ = error + "<br>" + e.getLocalizedMessage();
+							Log.e("Error--",""+error_);
 							handler.post(new Runnable() {
 								public void run() {
 									Utils.showFatalErrorMessage(getContext(), error_);
@@ -528,6 +530,7 @@ public class VncCanvas extends ImageView {
 		}
 	}
 
+
 	/*
 	 * f(x,s) is a function that returns the coordinate in screen/scroll space corresponding
 	 * to the coordinate x in full-frame space with scaling s.
@@ -663,6 +666,10 @@ public class VncCanvas extends ImageView {
 		mouseFollowPan();
 	}
 
+	public void moveMouse(MotionEvent event) {
+		super.onGenericMotionEvent(event);
+		warpMouse((int)event.getX(),(int)event.getY());
+	}
 	void handleRawRect(int x, int y, int w, int h) throws IOException {
 		handleRawRect(x, y, w, h, true);
 	}
@@ -691,7 +698,7 @@ public class VncCanvas extends ImageView {
 		  
 			final int l = w * 4;
 			if (l>handleRawRectBuffer.length) {
-      handleRawRectBuffer = new byte[l];
+    		  handleRawRectBuffer = new byte[l];
 			}
 			int i, offset;
 			for (int dy = y; dy < y + h; dy++) {
@@ -834,9 +841,15 @@ public class VncCanvas extends ImageView {
 		    if (action == MotionEvent.ACTION_DOWN || (mouseIsDown && action == MotionEvent.ACTION_MOVE)) {
 		      if (useRightButton) {
 		        pointerMask = MOUSE_BUTTON_RIGHT;
+				Log.e("mouse_btn_right",""+pointerMask);
+				//  Toast.makeText(getContext(), "right btn---"+pointerMask, Toast.LENGTH_SHORT).show();
 		      } else {
 		        pointerMask = MOUSE_BUTTON_LEFT;
-		      }
+				  Log.e("mouse_btn_left",""+pointerMask);
+				 // Toast.makeText(getContext(), "Left btn---"+pointerMask, Toast.LENGTH_SHORT).show();
+
+
+			  }
 		    } else if (action == MotionEvent.ACTION_UP) {
 		      pointerMask = 0;
 		    }

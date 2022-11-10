@@ -16,8 +16,8 @@
         android:layout_marginEnd="15dp"
         android:background="@drawable/bg_edt_text"
         android:hint="@string/nick_name"
-        android:text="@string/usernames"
-        android:paddingStart="10dp" />
+        android:paddingStart="10dp"
+        android:text="@string/usernames" />
 
     <EditText
         android:id="@+id/edtPassword"

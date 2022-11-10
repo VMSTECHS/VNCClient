@@ -55,15 +55,15 @@ public class AbstractBitmapDrawable extends DrawableContainer {
 	void drawCursor(Canvas canvas)
 	{
 		canvas.drawRect(cursorRect,_whitePaint);
-		canvas.drawRect((float)cursorRect.left + 1, (float)cursorRect.top + 1, (float)cursorRect.right - 1, (float)cursorRect.bottom - 1, _blackPaint);
+		canvas.drawRect((float)cursorRect.left + 0, (float)cursorRect.top + 0, (float)cursorRect.right - 0, (float)cursorRect.bottom - 0, _blackPaint);
 	}
 	
 	void setCursorRect(int mouseX, int mouseY)
 	{
-		cursorRect.left = mouseX - 2;
-		cursorRect.right = cursorRect.left + 4;
-		cursorRect.top = mouseY - 2;
-		cursorRect.bottom = cursorRect.top + 4;			
+		cursorRect.left = mouseX - 0;
+		cursorRect.right = cursorRect.left + 0;
+		cursorRect.top = mouseY - 0;
+		cursorRect.bottom = cursorRect.top + 0;
 	}
 
 	/* (non-Javadoc)
