@@ -51,7 +51,6 @@ public class AbstractBitmapDrawable extends DrawableContainer {
 			}
 		}
 	}
-	
 	void drawCursor(Canvas canvas)
 	{
 		canvas.drawRect(cursorRect,_whitePaint);

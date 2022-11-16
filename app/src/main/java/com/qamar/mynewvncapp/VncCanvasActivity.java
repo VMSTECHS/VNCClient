@@ -210,6 +210,7 @@ public class VncCanvasActivity extends Activity {
                 if (middleDown != mMiddleDown) {
                     // middle button pressed or released
                     mMiddleDown = middleDown;
+                    Toast.makeText(VncCanvasActivity.this, "middle scroll--"+mMiddleDown, Toast.LENGTH_SHORT).show();
                 }
 
                 return true;
@@ -1051,7 +1052,6 @@ public class VncCanvasActivity extends Activity {
     public boolean onKeyDown(int keyCode, KeyEvent evt) {
         if (keyCode == KeyEvent.KEYCODE_MENU)
             return super.onKeyDown(keyCode, evt);
-
         return inputHandler.onKeyDown(keyCode, evt);
     }
 
@@ -1059,7 +1059,6 @@ public class VncCanvasActivity extends Activity {
     public boolean onKeyUp(int keyCode, KeyEvent evt) {
         if (keyCode == KeyEvent.KEYCODE_MENU)
             return super.onKeyUp(keyCode, evt);
-
         return inputHandler.onKeyUp(keyCode, evt);
     }
 
@@ -1091,7 +1090,6 @@ public class VncCanvasActivity extends Activity {
         // Toast.makeText(VncCanvasActivity.this,"X: "+event.getX()+" Y: "+event.getY(),Toast.LENGTH_LONG).show();
         // vncCanvas.warpMouse(event.getX(),event.getY());
         vncCanvas.moveMouse(event);
-        // vncCanvas.scrollToAbsolute();
         return super.onGenericMotionEvent(event);
     }
 
